@@ -1,0 +1,37 @@
+{
+  "project1": {
+        "todo": [{
+          "title": "item1",
+          "description": "some description",
+          "date": "some date"
+        }],
+        "doing": [{
+          "title": "item2",
+          "description": "some description",
+          "date": "some date"
+        }],
+        "did": [{
+          "title": "item3",
+          "description": "some description",
+          "date": "some date"
+        }]
+  },
+
+  "project2": {
+        "todo": [{
+          "title": "item4",
+          "description": "some description",
+          "date": "some date"
+        }],
+        "doing": [{
+          "title": "item5",
+          "description": "some description",
+          "date": "some date"
+        }],
+        "did": [{
+          "title": "item6",
+          "description": "some description",
+          "date": "some date"
+        }]
+  }
+}
