@@ -19,8 +19,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		var cmd tea.Cmd
 		var cmds []tea.Cmd
 		m.header = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render("\nGoban")
-		titles := []string{"todo", "doing", "did"}
-		m.initializeLists(titles)
+		m.lists = m.initializeLists()
 		for i := 0; i < len(m.lists); i++ {
 			var res tea.Model
 			res, cmd = m.lists[i].Update(msg)
@@ -43,11 +42,9 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		case "h":
 			if m.focused == todo {
-				prevColumn := m.lists[m.focused]
-				prevColumn.focused = false
+				m.lists[m.focused].focused = false
 				m.focused = did
-				currColumn := m.lists[m.focused]
-				currColumn.focused = true
+				m.lists[m.focused].focused = true
 				return m, nil
 			} else {
 				m.lists[m.focused].focused = false
@@ -78,8 +75,8 @@ func (m *ListModel) View() string {
 	}
 }
 
-func (m *ListModel) initializeLists(title []string) {
-	m.lists = []Column{NewColumn(title[0], 0, 0), NewColumn(title[1], 0, 0), NewColumn(title[2], 0, 0)}
+func (m *ListModel) initializeLists() []Column {
+	return renderColumns(GetDataFromJson())
 }
 
 func initializeModel() *ListModel {

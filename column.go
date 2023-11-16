@@ -45,19 +45,51 @@ func (m Column) View() string {
 	return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(m.width).Height(m.height).Render(m.list.View())
 }
 
-func NewColumn(title string, width, height int) Column {
-	delegate := list.NewDefaultDelegate()
-	newList := list.New([]list.Item{}, delegate, 0, 0)
-	newList.SetShowHelp(false)
-	newList.Title = title
-	//newList.SetShowTitle(true)
+func renderColumns(data []todoModel) []Column {
+	var columnList []Column
+	var column Column
+	var todoData todoModel
 
-	newList.SetItems([]list.Item{
-		Task{status: todo, title: "do this", description: "now"},
-		Task{status: todo, title: "do this 1", description: "ok"},
-		Task{status: todo, title: "do this 2", description: "yerr"},
-	})
-	return Column{focused: true, list: newList, height: height, width: width}
+	todoData = data[0]
+
+	var delegate list.DefaultDelegate
+
+	var projectModel = [][]map[string]string{todoData.todo, todoData.doing, todoData.did}
+	for categoryIndex := range projectModel {
+		var categoryList list.Model
+		var cat status
+		delegate = list.NewDefaultDelegate()
+		categoryList = list.New([]list.Item{}, delegate, 0, 0)
+		categoryList.SetShowHelp(false)
+		switch categoryIndex {
+		case 0:
+			categoryList.Title = "todo"
+			cat = todo
+		case 1:
+			categoryList.Title = "doing"
+			cat = doing
+		case 2:
+			categoryList.Title = "did"
+			cat = did
+		}
+		category := projectModel[categoryIndex]
+		var itemList []list.Item
+		for itemKey := range category {
+			var item list.Item
+			item = Task{
+				status:      cat,
+				title:       category[itemKey]["title"],
+				description: category[itemKey]["description"],
+			}
+			itemList = append(itemList, item)
+		}
+		categoryList.SetItems(itemList)
+
+		column = Column{focused: true, list: categoryList, width: 30, height: 30}
+		columnList = append(columnList, column)
+	}
+
+	return columnList
 }
 
 func (m Column) NewFooter() string {
