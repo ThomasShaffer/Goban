@@ -8,6 +8,7 @@ import (
 type ListModel struct {
 	focused status
 	lists   []Column
+	header  string
 	loaded  bool
 }
 
@@ -17,6 +18,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		var cmd tea.Cmd
 		var cmds []tea.Cmd
+		m.header = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render("\nGoban")
 		titles := []string{"todo", "doing", "did"}
 		m.initializeLists(titles)
 		for i := 0; i < len(m.lists); i++ {
@@ -41,14 +43,17 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		case "h":
 			if m.focused == todo {
-				m.lists[m.focused].focused = false
+				prevColumn := m.lists[m.focused]
+				prevColumn.focused = false
 				m.focused = did
-				m.lists[m.focused].focused = true
+				currColumn := m.lists[m.focused]
+				currColumn.focused = true
 				return m, nil
 			} else {
 				m.lists[m.focused].focused = false
 				m.focused = (m.focused - 1) % 3
 				m.lists[m.focused].focused = true
+				return m, nil
 			}
 		}
 	}
@@ -67,15 +72,14 @@ func (m *ListModel) View() string {
 			m.lists[doing].View(),
 			m.lists[did].View(),
 		)
-		m.lists[description].list.SetSize(0, 15)
-		return lipgloss.JoinVertical(lipgloss.Center, "\nGoban", listModel, m.lists[description].View())
+		return lipgloss.JoinVertical(lipgloss.Center, m.header, listModel, m.lists[m.focused].foot)
 	} else {
 		return "hold on now"
 	}
 }
 
 func (m *ListModel) initializeLists(title []string) {
-	m.lists = []Column{NewColumn(title[0], 0, 0), NewColumn(title[1], 0, 0), NewColumn(title[2], 0, 0), NewBottomColumn(0, 0)}
+	m.lists = []Column{NewColumn(title[0], 0, 0), NewColumn(title[1], 0, 0), NewColumn(title[2], 0, 0)}
 }
 
 func initializeModel() *ListModel {

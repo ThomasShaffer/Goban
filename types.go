@@ -8,7 +8,7 @@ const (
 	todo status = iota
 	doing
 	did
-	description
+	footer
 )
 
 type todoModel struct {
