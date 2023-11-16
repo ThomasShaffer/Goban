@@ -80,6 +80,7 @@ func renderColumns(data []todoModel) []Column {
 				status:      cat,
 				title:       category[itemKey]["title"],
 				description: category[itemKey]["description"],
+				date:        category[itemKey]["date"],
 			}
 			itemList = append(itemList, item)
 		}
@@ -93,7 +94,10 @@ func renderColumns(data []todoModel) []Column {
 }
 
 func (m Column) NewFooter() string {
-	return m.footerStyle.Render(fmt.Sprintf("%s \n\n\n\n %s", m.list.Items()[m.list.Cursor()].(Task).Title(), m.list.Items()[m.list.Cursor()].(Task).Description()))
+	return m.footerStyle.Render(fmt.Sprintf("%s \n updated: %s \n\n\n\n %s",
+		m.list.Items()[m.list.Cursor()].(Task).title,
+		m.list.Items()[m.list.Cursor()].(Task).date,
+		m.list.Items()[m.list.Cursor()].(Task).description))
 
 }
 

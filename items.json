@@ -2,38 +2,39 @@
   "project1": {
         "todo": [
           {
-          "title": "todo1",
-          "description": "description for tood1",
-          "date": "some date 1"
+          "title": "create add tasks",
+          "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)",
+          "date": "11/16/23"
           },
           {
-            "title": "todo2",
-            "description": "description for tood2",
-            "date": "some date2"
+            "title": "create edit tasks",
+            "description": "We should also be able to select one of our tasks that are premade and edit the item.\n only have the ability to change the title and the description",
+            "date": "11/16/23"
+          },
+          {
+            "title": "create delete tasks",
+            "description": "We should also be able to delete one our tasks",
+            "date": "11/16/23"
           }
         ],
         "doing": [
-          {
-          "title": "doing1",
-          "description": "doing sum",
-          "date": "some date"
-          },
-          {
-            "title": "doing2",
-            "description": "proj1doing sum",
-            "date": "some date"
-          }
+          {}
         ],
         "did": [
           {
-          "title": "did3",
-          "description": "did some",
-          "date": "some date"
+          "title": "create goban board layout",
+          "description": "goban layout should have a header, 3 columns, footer for descriptions",
+          "date": "11/16/23"
           },
           {
-            "title": "did4",
-            "description": "didproj1 some",
-            "date": "some date"
+          "title": "enable navigation",
+          "description": "we need to be able to navigate through each column with VIM bindings of course",
+          "date": "11/16/23"
+          },
+          {
+          "title": "properly preview task and its description",
+          "description": "when we hover over a taks the footer should display a description of the task. \n this task should have name, date, description",
+          "date": "11/16/23"
           }
         ]
   },

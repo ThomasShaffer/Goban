@@ -4,6 +4,7 @@ type Task struct {
 	status      status
 	title       string
 	description string
+	date        string
 }
 
 func (t Task) FilterValue() string {
@@ -15,5 +16,10 @@ func (t Task) Title() string {
 }
 
 func (t Task) Description() string {
-	return t.description
+	slice := min(len(t.description), 20)
+	return t.description[:slice] + "..."
+}
+
+func (t Task) Date() string {
+	return t.date
 }
