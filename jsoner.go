@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func GetDataFromJson() []todoModel {
-	file, err := os.ReadFile("./items.json")
+func ReadDataFromJson(path string)  map[string]map[string][]map[string]string{
+	file, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println("rawr uwu")
 	}
@@ -16,7 +16,39 @@ func GetDataFromJson() []todoModel {
 	if err != nil {
 		fmt.Println("uwu rawrr")
 	}
+    
+    return jsonData
 
+}
+
+func WriteDataToJson(t Task) {
+    jsonData := ReadDataFromJson("./items.json")
+    
+
+    for project := range jsonData {
+        items := jsonData[project]
+        for category := range items {
+            if category != "todo" {
+                continue
+            }
+            tasks := items[category]
+            taskMap := t.toMap()
+            tasks = append(tasks, taskMap)
+            items[category] = tasks
+        }
+    }
+    marshaledData, _ := json.Marshal(jsonData)
+    file, err := os.Create("./items.json")
+    if err != nil {
+        panic(err)
+    }
+    file.Write(marshaledData)
+    return 
+
+}
+
+func GetDataFromJson() []todoModel {
+    jsonData := ReadDataFromJson("./items.json")
 	var data []todoModel
 	for p := range jsonData {
 		var project todoModel

@@ -28,9 +28,6 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.width = msg.Width/margin - 2
 		c.list.SetSize(msg.Width/margin, msg.Height/2)
 	case tea.KeyMsg:
-		if msg.String() == "q" {
-			return c, tea.Quit
-		}
 		if c.footer == nil || (c.footer != nil && !c.footer.active) {
 			if msg.String() == "a" {
 				c.footer = NewForm()
@@ -44,10 +41,22 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.list, cmd = c.list.Update(msg)
 				c.foot = c.NewFooter()
 				return c, cmd
-			}
-			result, cmd := c.footer.Update(msg)
-			c.foot = c.footerStyle.Render(result.View())
-			return c, cmd
+            } else if msg.String() == "enter" {
+                newTask := Task{
+                    status: todo,
+                    title: c.footer.title.Value(),
+                    description: c.footer.description.Value(),
+                    date: "not needed",
+                }
+                c.list.InsertItem(10,newTask)
+                WriteDataToJson(newTask)
+				c.footer.active = false
+
+            } else {
+                result, cmd := c.footer.Update(msg)
+                c.foot = c.footerStyle.Render(result.View())
+                return c, cmd
+            }
 		}
 	}
 	c.list, cmd = c.list.Update(msg)
@@ -100,6 +109,7 @@ func renderColumns(data []todoModel) []Column {
 				date:        category[itemKey]["date"],
 			}
 			itemList = append(itemList, item)
+
 		}
 		categoryList.SetItems(itemList)
 

@@ -36,7 +36,7 @@ func (f *Form) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		if f.title.Focused() {
 			switch msg.String() {
-			case "enter":
+			case "tab":
 				f.title.Blur()
 				f.description.Focus()
 				return f, cmd
@@ -46,7 +46,7 @@ func (f *Form) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return f, cmd
 		}
 		switch msg.String() {
-		case "enter":
+		case "tab":
 			f.description.Blur()
 			f.title.Focus()
 			return f, cmd

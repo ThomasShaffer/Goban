@@ -34,9 +34,6 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loaded = true
 		return m, tea.Batch(cmds...)
 	case tea.KeyMsg:
-		if msg.String() == "q" {
-			return m, tea.Quit
-		}
 		if m.lists[m.focused].footer != nil && m.lists[m.focused].footer.active {
 			result, _ := m.lists[m.focused].Update(msg)
 			if _, ok := result.(Column); ok {
