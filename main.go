@@ -6,8 +6,10 @@ import (
 	"os"
 )
 
+var m *ListModel
+
 func main() {
-	m := initializeModel()
+	m = initializeModel()
 	p := tea.NewProgram(m, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Alas, there's been an error: %v", err)

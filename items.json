@@ -2,11 +2,6 @@
   "project1": {
         "todo": [
           {
-          "title": "create add tasks",
-          "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)",
-          "date": "11/16/23"
-          },
-          {
             "title": "create edit tasks",
             "description": "We should also be able to select one of our tasks that are premade and edit the item.\n only have the ability to change the title and the description",
             "date": "11/16/23"
@@ -18,7 +13,11 @@
           }
         ],
         "doing": [
-          {}
+          {
+            "title": "create add tasks",
+            "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)\n Note we need to do some stuff with writing to json to persist!",
+            "date": "11/16/23"
+          }
         ],
         "did": [
           {

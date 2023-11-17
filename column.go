@@ -13,36 +13,53 @@ type Column struct {
 	height      int
 	width       int
 	foot        string
-	footer      bool
+	footer      *Form
 	footerStyle lipgloss.Style
 }
 
-func (m Column) Init() tea.Cmd { return nil }
+func (c Column) Init() tea.Cmd { return nil }
 
-func (m Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.footerStyle = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(msg.Height/3 - 3).Align(lipgloss.Center)
-		m.foot = m.NewFooter()
-		m.width = msg.Width/margin - 2
-		m.list.SetSize(msg.Width/margin, msg.Height/2)
+		c.footerStyle = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(msg.Height/3 - 3).Align(lipgloss.Center)
+		c.foot = c.NewFooter()
+		c.width = msg.Width/margin - 2
+		c.list.SetSize(msg.Width/margin, msg.Height/2)
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "q":
-			return m, tea.Quit
+		if msg.String() == "q" {
+			return c, tea.Quit
+		}
+		if c.footer == nil || (c.footer != nil && !c.footer.active) {
+			if msg.String() == "a" {
+				c.footer = NewForm()
+				c.foot = c.footerStyle.Render(c.footer.View())
+				return c, cmd
+			}
+		}
+		if c.footer != nil && c.footer.active {
+			if msg.String() == "ctrl+b" {
+				c.footer.active = false
+				c.list, cmd = c.list.Update(msg)
+				c.foot = c.NewFooter()
+				return c, cmd
+			}
+			result, cmd := c.footer.Update(msg)
+			c.foot = c.footerStyle.Render(result.View())
+			return c, cmd
 		}
 	}
-	m.list, cmd = m.list.Update(msg)
-	m.foot = m.NewFooter()
-	return m, cmd
+	c.list, cmd = c.list.Update(msg)
+	c.foot = c.NewFooter()
+	return c, cmd
 }
 
-func (m Column) View() string {
-	if m.focused {
-		return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).BorderForeground(lipgloss.Color("62")).Width(m.width).Height(m.height).Render(m.list.View())
+func (c Column) View() string {
+	if c.focused {
+		return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).BorderForeground(lipgloss.Color("62")).Width(c.width).Height(c.height).Render(c.list.View())
 	}
-	return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(m.width).Height(m.height).Render(m.list.View())
+	return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(c.width).Height(c.height).Render(c.list.View())
 }
 
 func renderColumns(data []todoModel) []Column {
@@ -93,15 +110,15 @@ func renderColumns(data []todoModel) []Column {
 	return columnList
 }
 
-func (m Column) NewFooter() string {
-	return m.footerStyle.Render(fmt.Sprintf("%s \n updated: %s \n\n\n\n %s",
-		m.list.Items()[m.list.Cursor()].(Task).title,
-		m.list.Items()[m.list.Cursor()].(Task).date,
-		m.list.Items()[m.list.Cursor()].(Task).description))
+func (c Column) NewFooter() string {
+	return c.footerStyle.Render(fmt.Sprintf("%s \n updated: %s \n\n\n\n %s",
+		c.list.Items()[c.list.Cursor()].(Task).title,
+		c.list.Items()[c.list.Cursor()].(Task).date,
+		c.list.Items()[c.list.Cursor()].(Task).description))
 
 }
 
-func (m Column) GetFooterStyle() lipgloss.Style {
-	return m.footerStyle
+func (c Column) GetFooterStyle() lipgloss.Style {
+	return c.footerStyle
 
 }
