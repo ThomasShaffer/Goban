@@ -2,11 +2,6 @@
   "project1": {
         "todo": [
           {
-            "title": "functionality to move items",
-            "description": "we should be able to move items to the left or to the right",
-            "date": "11/16/23"
-          },
-          {
             "title": "make UI pretty",
             "description": "set a dynamic ending for titles and descriptions",
             "date": "11/16/23"
@@ -20,13 +15,23 @@
             "title": "support multi project functionality",
             "description": "Goban only has one place to store current todos/doings/dids. \n We want to be able to separate tasks based on the project that we are currently in. Should be able to navigate through projects with the UI adjusting accordingly",
             "date": "11/16/23"
+          },
+          {
+            "title": "refactor jsoner.go",
+            "description": "theres a lot of code reuse in jsoner.go and is sorta ugly, i want to fix it",
+            "date": "11/16/23"
+          },
+          {
+            "title": "refactor column.go",
+            "description": "theres a lot of messy code and ugly if statements in column.go lets make it somewhat understandable",
+            "date": "11/16/23"
           }
 
         ],
         "doing": [
           {
-            "title": "create delete tasks",
-            "description": "We should also be able to delete one our tasks",
+            "title": "functionality to move items",
+            "description": "we should be able to move items to the left or to the right",
             "date": "11/16/23"
           }
         ],
@@ -54,6 +59,11 @@
           {
             "title": "create add tasks",
             "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)\n Note we need to do some stuff with writing to json to persist!",
+            "date": "11/16/23"
+          },
+          {
+            "title": "create delete tasks",
+            "description": "We should also be able to delete one our tasks",
             "date": "11/16/23"
           }
         ]

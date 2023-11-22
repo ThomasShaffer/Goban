@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-    "time"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"time"
 )
 
 type Column struct {
@@ -34,11 +34,14 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.footer = NewForm()
 				c.foot = c.footerStyle.Render(c.footer.View())
 				return c, cmd
-			}
-
-			if msg.String() == "e" {
+			} else if msg.String() == "e" {
 				c.footer = EditForm(c.list.SelectedItem().(Task))
 				c.foot = c.footerStyle.Render(c.footer.View())
+				return c, cmd
+			} else if msg.String() == "D" {
+				DeleteDataInJson(c.list.SelectedItem().(Task))
+				c.list.RemoveItem(c.list.Cursor())
+				c.list.ResetSelected()
 				return c, cmd
 			}
 		}
@@ -48,31 +51,31 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.list, cmd = c.list.Update(msg)
 				c.foot = c.NewFooter()
 				return c, cmd
-            } else if msg.String() == "enter" {
-                currTime := time.Now()
-                userTask := Task{
-                    status: todo,
-                    title: c.footer.title.Value(),
-                    description: c.footer.description.Value(),
-                    date: currTime.Format("01-01-2006"),
-                }
-                if c.footer.isEdit {
-                    EditDataInJson(userTask, c.list.SelectedItem().(Task))
-                    c.footer.isEdit = false
-                    c.footer.active = false
-                    c.list.SetItem(c.list.Cursor(),userTask)
+			} else if msg.String() == "enter" {
+				currTime := time.Now()
+				userTask := Task{
+					status:      todo,
+					title:       c.footer.title.Value(),
+					description: c.footer.description.Value(),
+					date:        currTime.Format("01-01-2006"),
+				}
+				if c.footer.isEdit {
+					EditDataInJson(userTask, c.list.SelectedItem().(Task))
+					c.footer.isEdit = false
+					c.footer.active = false
+					c.list.SetItem(c.list.Cursor(), userTask)
 
-                } else {
-                    WriteDataToJson(userTask)
-                    c.footer.active = false
-                    c.list.InsertItem(100,userTask)
-                }
+				} else {
+					WriteDataToJson(userTask)
+					c.footer.active = false
+					c.list.InsertItem(100, userTask)
+				}
 
-            } else {
-                result, cmd := c.footer.Update(msg)
-                c.foot = c.footerStyle.Render(result.View())
-                return c, cmd
-            }
+			} else {
+				result, cmd := c.footer.Update(msg)
+				c.foot = c.footerStyle.Render(result.View())
+				return c, cmd
+			}
 		}
 	}
 	c.list, cmd = c.list.Update(msg)
