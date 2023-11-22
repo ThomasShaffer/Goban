@@ -11,12 +11,13 @@ type Form struct {
 	title       textinput.Model
 	description textinput.Model
 	active      bool
+    isEdit      bool
 	style       lipgloss.Style
 }
 
 func NewForm() *Form {
 	form := Form{
-		header:      "form",
+		header:      "new form",
 		title:       textinput.New(),
 		description: textinput.New(),
 	}
@@ -25,6 +26,21 @@ func NewForm() *Form {
 	form.description.Placeholder = "add description..."
 	form.active = true
 	return &form
+}
+
+
+func EditForm(task Task) *Form {
+    form := Form{
+        header: "edit form",
+        title: textinput.New(),
+        description: textinput.New(),
+    }
+    form.title.SetValue(task.title)//(Value = task.title
+    form.title.Focus()
+    form.description.SetValue(task.description)//(Value = task.title
+    form.active = true
+    form.isEdit = true
+    return &form
 }
 
 func (f *Form) Init() tea.Cmd { return nil }

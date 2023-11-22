@@ -2,20 +2,31 @@
   "project1": {
         "todo": [
           {
-            "title": "create edit tasks",
-            "description": "We should also be able to select one of our tasks that are premade and edit the item.\n only have the ability to change the title and the description",
+            "title": "functionality to move items",
+            "description": "we should be able to move items to the left or to the right",
             "date": "11/16/23"
           },
           {
-            "title": "create delete tasks",
+            "title": "make UI pretty",
+            "description": "set a dynamic ending for titles and descriptions",
+            "date": "11/16/23"
+          },
+          {
+            "title": "need to be able to archive past todos",
             "description": "We should also be able to delete one our tasks",
             "date": "11/16/23"
+          },
+          {
+            "title": "support multi project functionality",
+            "description": "Goban only has one place to store current todos/doings/dids. \n We want to be able to separate tasks based on the project that we are currently in. Should be able to navigate through projects with the UI adjusting accordingly",
+            "date": "11/16/23"
           }
+
         ],
         "doing": [
           {
-            "title": "create add tasks",
-            "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)\n Note we need to do some stuff with writing to json to persist!",
+            "title": "create delete tasks",
+            "description": "We should also be able to delete one our tasks",
             "date": "11/16/23"
           }
         ],
@@ -34,45 +45,16 @@
           "title": "properly preview task and its description",
           "description": "when we hover over a taks the footer should display a description of the task. \n this task should have name, date, description",
           "date": "11/16/23"
-          }
-        ]
-  },
-
-  "project2": {
-        "todo": [
-          {
-          "title": "todo4",
-          "description": "proj2 stuff",
-          "date": "some date"
           },
           {
-            "title": "todo5",
-            "description": "proj 2 again",
-            "date": "some date"
-          }
-        ],
-        "doing": [
-          {
-          "title": "doing5",
-          "description": "pro 2j ",
-          "date": "some date"
+            "title": "create edit tasks",
+            "description": "We should also be able to select one of our tasks that are premade and edit the item.\n only have the ability to change the title and the description",
+            "date": "11/16/23"
           },
           {
-            "title": "doing8",
-            "description": "proojdl 2j ",
-            "date": "some date"
-          }
-        ],
-        "did": [
-          {
-          "title": "idid6",
-          "description": "proj2n",
-          "date": "some date"
-          },
-          {
-            "title": "idid19203",
-            "description": "protothesquarej2n",
-            "date": "some date"
+            "title": "create add tasks",
+            "description": "Now we have most of the navigation down.\n We need to be able to create a task and add it to this json \n should have a task name, task description, date created (which should be auto generated)\n Note we need to do some stuff with writing to json to persist!",
+            "date": "11/16/23"
           }
         ]
   }

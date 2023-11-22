@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+    "time"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -34,6 +35,12 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.foot = c.footerStyle.Render(c.footer.View())
 				return c, cmd
 			}
+
+			if msg.String() == "e" {
+				c.footer = EditForm(c.list.SelectedItem().(Task))
+				c.foot = c.footerStyle.Render(c.footer.View())
+				return c, cmd
+			}
 		}
 		if c.footer != nil && c.footer.active {
 			if msg.String() == "ctrl+b" {
@@ -42,15 +49,24 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.foot = c.NewFooter()
 				return c, cmd
             } else if msg.String() == "enter" {
-                newTask := Task{
+                currTime := time.Now()
+                userTask := Task{
                     status: todo,
                     title: c.footer.title.Value(),
                     description: c.footer.description.Value(),
-                    date: "not needed",
+                    date: currTime.Format("01-01-2006"),
                 }
-                c.list.InsertItem(10,newTask)
-                WriteDataToJson(newTask)
-				c.footer.active = false
+                if c.footer.isEdit {
+                    EditDataInJson(userTask, c.list.SelectedItem().(Task))
+                    c.footer.isEdit = false
+                    c.footer.active = false
+                    c.list.SetItem(c.list.Cursor(),userTask)
+
+                } else {
+                    WriteDataToJson(userTask)
+                    c.footer.active = false
+                    c.list.InsertItem(100,userTask)
+                }
 
             } else {
                 result, cmd := c.footer.Update(msg)

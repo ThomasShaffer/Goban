@@ -1,5 +1,4 @@
 package main
-
 import (
 	"encoding/json"
 	"fmt"
@@ -45,6 +44,27 @@ func WriteDataToJson(t Task) {
     file.Write(marshaledData)
     return 
 
+}
+
+func EditDataInJson(newTask, oldTask Task) {
+    jsonData := ReadDataFromJson("./items.json")
+
+    for project := range jsonData {
+        items := jsonData[project]
+        category := StatusToString(oldTask.status)
+        for task := range items[category] {
+            if oldTask.title == items[category][task]["title"]{
+                items[category][task] = newTask.toMap() 
+            }
+        }
+    }
+    marshaledData, _ := json.Marshal(jsonData)
+    file, err := os.Create("./items.json")
+    if err != nil {
+        panic(err)
+    }
+    file.Write(marshaledData)
+    return 
 }
 
 func GetDataFromJson() []todoModel {
