@@ -26,7 +26,7 @@ func WriteDataToJson(t Task) {
 	for project := range jsonData {
 		items := jsonData[project]
 		for category := range items {
-			if category != "todo" {
+			if category != StatusToString(t.status) {
 				continue
 			}
 			tasks := items[category]
@@ -71,15 +71,16 @@ func EditDataInJson(newTask, oldTask Task) {
 func DeleteDataInJson(task Task) {
 	jsonData := ReadDataFromJson("./items.json")
 
-	for project := range jsonData {
-		items := jsonData[project]
+	for projects := range jsonData {
+		project := jsonData[projects]
 		category := StatusToString(task.status)
-		for item := range items[category] {
-			if task.title == items[category][item]["title"] &&
-				task.description == items[category][item]["description"] {
-				items[category] = removeItem(items[category], item)
+		var index int
+		for item := range project[category] {
+			if task.title == project[category][item]["title"] && task.description == project[category][item]["description"] {
+				index = item
 			}
 		}
+		project[category] = removeItem(project[category], index)
 	}
 
 	marshaledData, _ := json.Marshal(jsonData)
