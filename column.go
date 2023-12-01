@@ -149,5 +149,4 @@ func (c Column) NewFooter() string {
 
 func (c Column) GetFooterStyle() lipgloss.Style {
 	return c.footerStyle
-
 }

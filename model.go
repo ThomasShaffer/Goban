@@ -43,22 +43,27 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		switch msg.String() {
 		case "l":
-			m.lists[m.focused].focused = false
-			m.focused = (m.focused + 1) % 3
-			m.lists[m.focused].focused = true
+			m.focusRight()
 			return m, nil
 		case "h":
-			if m.focused == todo {
-				m.lists[m.focused].focused = false
-				m.focused = did
-				m.lists[m.focused].focused = true
-				return m, nil
-			} else {
-				m.lists[m.focused].focused = false
-				m.focused = (m.focused - 1) % 3
-				m.lists[m.focused].focused = true
-				return m, nil
-			}
+			m.focusLeft()
+			return m, nil
+		case "L":
+			task := m.currColumn().list.SelectedItem().(Task)
+			m.lists[m.focused].list.RemoveItem(m.lists[m.focused].list.Cursor())
+			DeleteDataInJson(task)
+			m.focusRight()
+			task.status = m.focused
+			WriteDataToJson(task)
+			m.lists[m.focused].list.InsertItem(m.lists[m.focused].list.Cursor(), task)
+		case "H":
+			task := m.currColumn().list.SelectedItem().(Task)
+			m.lists[m.focused].list.RemoveItem(m.lists[m.focused].list.Cursor())
+			DeleteDataInJson(task)
+			m.focusLeft()
+			task.status = m.focused
+			WriteDataToJson(task)
+			m.lists[m.focused].list.InsertItem(m.lists[m.focused].list.Cursor(), task)
 		}
 	}
 	var cmd tea.Cmd
@@ -84,6 +89,28 @@ func (m *ListModel) View() string {
 
 func (m *ListModel) initializeLists() []Column {
 	return renderColumns(GetDataFromJson())
+}
+
+func (m *ListModel) focusRight() {
+	m.lists[m.focused].focused = false
+	m.focused = (m.focused + 1) % 3
+	m.lists[m.focused].focused = true
+}
+
+func (m *ListModel) focusLeft() {
+	if m.focused == todo {
+		m.lists[m.focused].focused = false
+		m.focused = did
+		m.lists[m.focused].focused = true
+	} else {
+		m.lists[m.focused].focused = false
+		m.focused = (m.focused - 1) % 3
+		m.lists[m.focused].focused = true
+	}
+}
+
+func (m *ListModel) currColumn() Column {
+	return m.lists[m.focused]
 }
 
 func initializeModel() *ListModel {
