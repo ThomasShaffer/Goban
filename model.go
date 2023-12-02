@@ -42,6 +42,16 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 		switch msg.String() {
+		case "!":
+			{
+				projects.nextProject()
+				p.RestoreTerminal()
+			}
+		case "@":
+			{
+				projects.previousProject()
+				p.RestoreTerminal()
+			}
 		case "l":
 			m.focusRight()
 			return m, nil
