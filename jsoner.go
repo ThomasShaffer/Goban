@@ -4,24 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"reflect"
 )
 
-func ReadDataFromJson(path string) map[string]map[string][]map[string]string {
-	file, err := os.ReadFile(path)
-	if err != nil {
-		fmt.Println("rawr uwu")
-	}
-	var jsonData map[string]map[string][]map[string]string
-	err = json.Unmarshal([]byte(file), &jsonData)
-	if err != nil {
-		fmt.Println("uwu rawrr")
-	}
-	return jsonData
-
-}
-
-func WriteDataToJson(t Task) {
-	jsonData := ReadDataFromJson("./items.json")
+func AddDataToJson(t Task) {
+	jsonData := readDataFromJson("./items.json")
 
 	for project := range jsonData {
 		items := jsonData[project]
@@ -47,7 +34,7 @@ func WriteDataToJson(t Task) {
 }
 
 func EditDataInJson(newTask, oldTask Task) {
-	jsonData := ReadDataFromJson("./items.json")
+	jsonData := readDataFromJson("./items.json")
 
 	for project := range jsonData {
 		items := jsonData[project]
@@ -69,7 +56,7 @@ func EditDataInJson(newTask, oldTask Task) {
 }
 
 func DeleteDataInJson(task Task) {
-	jsonData := ReadDataFromJson("./items.json")
+	jsonData := readDataFromJson("./items.json")
 
 	for projects := range jsonData {
 		project := jsonData[projects]
@@ -93,8 +80,26 @@ func DeleteDataInJson(task Task) {
 
 }
 
+func MoveDataInJson(currentIndex, nextIndex int, status string) {
+	jsonData := readDataFromJson("./items.json")
+
+	for projects := range jsonData {
+		project := jsonData[projects]
+		items := project[status]
+		swapper := reflect.Swapper(items)
+		swapper(currentIndex, nextIndex)
+	}
+	marshaledData, _ := json.Marshal(jsonData)
+	file, err := os.Create("./items.json")
+	if err != nil {
+		panic(err)
+	}
+	file.Write(marshaledData)
+	return
+}
+
 func GetDataFromJson() []todoModel {
-	jsonData := ReadDataFromJson("./items.json")
+	jsonData := readDataFromJson("./items.json")
 	var data []todoModel
 	for p := range jsonData {
 		var project todoModel
@@ -117,6 +122,20 @@ func GetDataFromJson() []todoModel {
 		data = append(data, project)
 	}
 	return data
+}
+
+func readDataFromJson(path string) map[string]map[string][]map[string]string {
+	file, err := os.ReadFile(path)
+	if err != nil {
+		fmt.Println("rawr uwu")
+	}
+	var jsonData map[string]map[string][]map[string]string
+	err = json.Unmarshal([]byte(file), &jsonData)
+	if err != nil {
+		fmt.Println("uwu rawrr")
+	}
+	return jsonData
+
 }
 
 func removeItem(slice []map[string]string, index int) []map[string]string {

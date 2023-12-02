@@ -30,28 +30,36 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		c.list.SetSize(msg.Width/margin, msg.Height/2)
 	case tea.KeyMsg:
 		if c.footer == nil || (c.footer != nil && !c.footer.active) {
-			if msg.String() == "a" {
+			switch msg.String() {
+			case "a":
 				c.footer = NewForm()
 				c.foot = c.footerStyle.Render(c.footer.View())
 				return c, cmd
-			} else if msg.String() == "e" {
+			case "e":
 				c.footer = EditForm(c.list.SelectedItem().(Task))
 				c.foot = c.footerStyle.Render(c.footer.View())
 				return c, cmd
-			} else if msg.String() == "D" {
+			case "D":
 				DeleteDataInJson(c.list.SelectedItem().(Task))
 				c.list.RemoveItem(c.list.Cursor())
 				c.list.ResetSelected()
 				return c, cmd
+			case "J":
+				currentIndex, nextIndex, taskStatus := swapItems(&c, 1)
+				MoveDataInJson(currentIndex, nextIndex, taskStatus)
+			case "K":
+				currentIndex, nextIndex, taskStatus := swapItems(&c, -1)
+				MoveDataInJson(currentIndex, nextIndex, taskStatus)
 			}
 		}
 		if c.footer != nil && c.footer.active {
-			if msg.String() == "ctrl+b" {
+			switch msg.String() {
+			case "ctrl+b":
 				c.footer.active = false
 				c.list, cmd = c.list.Update(msg)
 				c.foot = c.NewFooter()
 				return c, cmd
-			} else if msg.String() == "enter" {
+			case "enter":
 				currTime := time.Now()
 				userTask := Task{
 					status:      todo,
@@ -66,12 +74,11 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					c.list.SetItem(c.list.Cursor(), userTask)
 
 				} else {
-					WriteDataToJson(userTask)
+					AddDataToJson(userTask)
 					c.footer.active = false
 					c.list.InsertItem(100, userTask)
 				}
-
-			} else {
+			default:
 				result, cmd := c.footer.Update(msg)
 				c.foot = c.footerStyle.Render(result.View())
 				return c, cmd
@@ -149,4 +156,20 @@ func (c Column) NewFooter() string {
 
 func (c Column) GetFooterStyle() lipgloss.Style {
 	return c.footerStyle
+}
+
+func swapItems(c *Column, dir int) (int, int, string) {
+	currentTask := c.list.SelectedItem()
+	currentIndex := c.list.Cursor()
+	if dir == 1 {
+		c.list.CursorDown()
+	} else if dir == -1 {
+		c.list.CursorUp()
+	}
+	c.list.Select(c.list.Cursor())
+	nextTask := c.list.SelectedItem()
+	nextIndex := c.list.Cursor()
+	c.list.SetItem(nextIndex, currentTask)
+	c.list.SetItem(currentIndex, nextTask)
+	return currentIndex, nextIndex, StatusToString(currentTask.(Task).status)
 }

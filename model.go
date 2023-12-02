@@ -49,21 +49,27 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.focusLeft()
 			return m, nil
 		case "L":
+			if m.currColumn().list.Cursor() == int(did) {
+				break
+			}
 			task := m.currColumn().list.SelectedItem().(Task)
 			m.lists[m.focused].list.RemoveItem(m.lists[m.focused].list.Cursor())
 			DeleteDataInJson(task)
 			m.focusRight()
 			task.status = m.focused
-			WriteDataToJson(task)
-			m.lists[m.focused].list.InsertItem(m.lists[m.focused].list.Cursor(), task)
+			AddDataToJson(task)
+			m.lists[m.focused].list.InsertItem(len(m.lists[m.focused].list.Items()), task)
 		case "H":
+			if m.currColumn().list.Cursor() == int(todo) {
+				break
+			}
 			task := m.currColumn().list.SelectedItem().(Task)
 			m.lists[m.focused].list.RemoveItem(m.lists[m.focused].list.Cursor())
 			DeleteDataInJson(task)
 			m.focusLeft()
 			task.status = m.focused
-			WriteDataToJson(task)
-			m.lists[m.focused].list.InsertItem(m.lists[m.focused].list.Cursor(), task)
+			AddDataToJson(task)
+			m.lists[m.focused].list.InsertItem(len(m.lists[m.focused].list.Items()), task)
 		}
 	}
 	var cmd tea.Cmd
