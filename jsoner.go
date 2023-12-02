@@ -8,7 +8,7 @@ import (
 )
 
 func AddDataToJson(t Task) {
-	jsonData := readDataFromJson("./items.json")
+	jsonData := readDataFromJson(projectJson)
 
 	for project := range jsonData {
 		items := jsonData[project]
@@ -24,7 +24,7 @@ func AddDataToJson(t Task) {
 	}
 
 	marshaledData, _ := json.Marshal(jsonData)
-	file, err := os.Create("./items.json")
+	file, err := os.Create(projectJson)
 	if err != nil {
 		panic(err)
 	}
@@ -34,7 +34,7 @@ func AddDataToJson(t Task) {
 }
 
 func EditDataInJson(newTask, oldTask Task) {
-	jsonData := readDataFromJson("./items.json")
+	jsonData := readDataFromJson(projectJson)
 
 	for project := range jsonData {
 		items := jsonData[project]
@@ -47,7 +47,7 @@ func EditDataInJson(newTask, oldTask Task) {
 	}
 
 	marshaledData, _ := json.Marshal(jsonData)
-	file, err := os.Create("./items.json")
+	file, err := os.Create(projectJson)
 	if err != nil {
 		panic(err)
 	}
@@ -56,7 +56,7 @@ func EditDataInJson(newTask, oldTask Task) {
 }
 
 func DeleteDataInJson(task Task) {
-	jsonData := readDataFromJson("./items.json")
+	jsonData := readDataFromJson(projectJson)
 
 	for projects := range jsonData {
 		project := jsonData[projects]
@@ -71,7 +71,7 @@ func DeleteDataInJson(task Task) {
 	}
 
 	marshaledData, _ := json.Marshal(jsonData)
-	file, err := os.Create("./items.json")
+	file, err := os.Create(projectJson)
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +81,7 @@ func DeleteDataInJson(task Task) {
 }
 
 func MoveDataInJson(currentIndex, nextIndex int, status string) {
-	jsonData := readDataFromJson("./items.json")
+	jsonData := readDataFromJson(projectJson)
 
 	for projects := range jsonData {
 		project := jsonData[projects]
@@ -90,7 +90,7 @@ func MoveDataInJson(currentIndex, nextIndex int, status string) {
 		swapper(currentIndex, nextIndex)
 	}
 	marshaledData, _ := json.Marshal(jsonData)
-	file, err := os.Create("./items.json")
+	file, err := os.Create(projectJson)
 	if err != nil {
 		panic(err)
 	}
@@ -99,7 +99,7 @@ func MoveDataInJson(currentIndex, nextIndex int, status string) {
 }
 
 func GetDataFromJson() []todoModel {
-	jsonData := readDataFromJson("./items.json")
+	jsonData := readDataFromJson(projectJson)
 	var data []todoModel
 	for p := range jsonData {
 		var project todoModel
