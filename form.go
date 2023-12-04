@@ -11,36 +11,50 @@ type Form struct {
 	title       textinput.Model
 	description textinput.Model
 	active      bool
-    isEdit      bool
+	formType    formType
 	style       lipgloss.Style
 }
 
 func NewForm() *Form {
 	form := Form{
-		header:      "new form",
+		header:      "new form\n",
 		title:       textinput.New(),
 		description: textinput.New(),
 	}
 	form.title.Placeholder = "new task"
 	form.title.Focus()
 	form.description.Placeholder = "add description..."
+	form.formType = add
 	form.active = true
 	return &form
 }
 
-
 func EditForm(task Task) *Form {
-    form := Form{
-        header: "edit form",
-        title: textinput.New(),
-        description: textinput.New(),
-    }
-    form.title.SetValue(task.title)//(Value = task.title
-    form.title.Focus()
-    form.description.SetValue(task.description)//(Value = task.title
-    form.active = true
-    form.isEdit = true
-    return &form
+	form := Form{
+		header:      "edit form\n",
+		title:       textinput.New(),
+		description: textinput.New(),
+	}
+	form.title.SetValue(task.title) //(Value = task.title
+	form.title.Focus()
+	form.description.SetValue(task.description) //(Value = task.title
+	form.active = true
+	form.formType = edit
+	return &form
+}
+
+func PomodoroForm() *Form {
+	form := Form{
+		header:      "pomodoro form\n",
+		title:       textinput.New(),
+		description: textinput.New(),
+	}
+	form.title.Placeholder = "number of pomodoro iterations"
+	form.title.Focus()
+	form.description.Placeholder = "duration of each iteration"
+	form.formType = pomodoro
+	form.active = true
+	return &form
 }
 
 func (f *Form) Init() tea.Cmd { return nil }

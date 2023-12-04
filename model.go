@@ -18,7 +18,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		var cmd tea.Cmd
 		var cmds []tea.Cmd
-		m.header = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render("\nGoban")
+		m.header = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render(projects.currProject().name)
 		m.lists = m.initializeLists()
 		for i := 0; i < len(m.lists); i++ {
 			var res tea.Model
@@ -80,6 +80,13 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			task.status = m.focused
 			AddDataToJson(task)
 			m.lists[m.focused].list.InsertItem(len(m.lists[m.focused].list.Items()), task)
+		case "P":
+			var cmd tea.Cmd
+			result, cmd := m.lists[m.focused].Update(msg)
+			if _, ok := result.(Column); ok {
+				m.lists[m.focused] = result.(Column)
+			}
+			return m, cmd
 		}
 	}
 	var cmd tea.Cmd

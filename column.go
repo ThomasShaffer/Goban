@@ -50,6 +50,10 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "K":
 				currentIndex, nextIndex, taskStatus := swapItems(&c, -1)
 				MoveDataInJson(currentIndex, nextIndex, taskStatus)
+			case "P":
+				c.footer = PomodoroForm()
+				c.foot = c.footerStyle.Render(c.footer.View())
+				return c, cmd
 			}
 		}
 		if c.footer != nil && c.footer.active {
@@ -67,13 +71,15 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					description: c.footer.description.Value(),
 					date:        currTime.Format("01-01-2006"),
 				}
-				if c.footer.isEdit {
+				if c.footer.formType == edit {
 					EditDataInJson(userTask, c.list.SelectedItem().(Task))
-					c.footer.isEdit = false
 					c.footer.active = false
 					c.list.SetItem(c.list.Cursor(), userTask)
 
-				} else {
+				} else if c.footer.formType == pomodoro {
+					c.footer.active = false
+
+				} else if c.footer.formType == add {
 					AddDataToJson(userTask)
 					c.footer.active = false
 					c.list.InsertItem(100, userTask)

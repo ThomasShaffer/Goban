@@ -6,31 +6,33 @@ import (
 )
 
 type Projects struct {
-	name      string
-	filePath  string
-	directory []string
+	directory []File
 	index     int
+}
+
+type File struct {
+	name     string
+	filePath string
 }
 
 func (p *Projects) nextProject() {
 	p.index = (p.index + 1) % len(p.directory)
-	p.filePath = p.directory[p.index]
 }
 
 func (p *Projects) previousProject() {
 	if p.index == 0 {
 		p.index = len(p.directory) - 1
-		p.filePath = p.directory[p.index]
-		p.name = p.filePath
 	} else {
 		p.index = p.index - 1
-		p.filePath = p.directory[p.index]
-		p.name = p.filePath
 	}
 }
 
+func (p *Projects) currProject() File {
+	return p.directory[p.index]
+}
+
 func initializeProjects() *Projects {
-	var projectsDirectory []string
+	var projects []File
 	dir, err := os.Open("./projects")
 	if err != nil {
 		fmt.Println(err)
@@ -42,12 +44,14 @@ func initializeProjects() *Projects {
 		os.Exit(1)
 	}
 	for _, file := range files {
-		projectsDirectory = append(projectsDirectory, "./projects/"+file.Name())
+		projects = append(projects,
+			File{
+				name:     file.Name(),
+				filePath: "./projects/" + file.Name(),
+			})
 	}
 	return &Projects{
-		name:      projectsDirectory[0],
-		filePath:  projectsDirectory[0],
-		directory: projectsDirectory,
+		directory: projects,
 		index:     0,
 	}
 }

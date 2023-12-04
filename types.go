@@ -3,6 +3,13 @@ package main
 const margin = 3
 
 type status int
+type formType int
+
+const (
+	add formType = iota
+	edit
+	pomodoro
+)
 
 const (
 	todo status = iota
