@@ -59,7 +59,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.focusLeft()
 			return m, nil
 		case "L":
-			if m.currColumn().list.Cursor() == int(did) {
+			if m.focused == did {
 				break
 			}
 			task := m.currColumn().list.SelectedItem().(Task)
@@ -70,7 +70,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			AddDataToJson(task)
 			m.lists[m.focused].list.InsertItem(len(m.lists[m.focused].list.Items()), task)
 		case "H":
-			if m.currColumn().list.Cursor() == int(todo) {
+			if m.focused == todo {
 				break
 			}
 			task := m.currColumn().list.SelectedItem().(Task)
