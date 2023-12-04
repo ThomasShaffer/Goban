@@ -87,6 +87,8 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.lists[m.focused] = result.(Column)
 			}
 			return m, cmd
+		case "R":
+			p.RestoreTerminal()
 		}
 	}
 	var cmd tea.Cmd
