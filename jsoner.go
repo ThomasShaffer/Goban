@@ -5,7 +5,32 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strings"
 )
+
+func WriteNewJson(t Task) {
+	gobanProjectFields := []string{"todo", "doing", "did"}
+	filePath := "./projects/" + strings.Trim(t.title, " ")
+	newProject := make(map[string][]map[string]string, 3)
+
+	for field := range gobanProjectFields {
+		itemList := make([]map[string]string, 1)
+		newProject[gobanProjectFields[field]] = itemList
+	}
+
+	jsonData := make(map[string]map[string][]map[string]string, 1)
+	jsonData["project"] = newProject
+	marshaledData, _ := json.Marshal(jsonData)
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		panic(err)
+	}
+
+	file.Write(marshaledData)
+	projects = initializeProjects()
+	return
+}
 
 func AddDataToJson(t Task) {
 	jsonData := readDataFromJson(projects.currProject().filePath)

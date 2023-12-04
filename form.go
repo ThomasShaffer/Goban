@@ -57,6 +57,20 @@ func PomodoroForm() *Form {
 	return &form
 }
 
+func ProjectForm() *Form {
+	form := Form{
+		header:      "project form\n",
+		title:       textinput.New(),
+		description: textinput.New(),
+	}
+	form.title.Placeholder = "enter project name"
+	form.title.Focus()
+	form.description.Placeholder = ""
+	form.formType = project
+	form.active = true
+	return &form
+}
+
 func (f *Form) Init() tea.Cmd { return nil }
 func (f *Form) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd

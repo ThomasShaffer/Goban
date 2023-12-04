@@ -54,6 +54,10 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				c.footer = PomodoroForm()
 				c.foot = c.footerStyle.Render(c.footer.View())
 				return c, cmd
+			case "N":
+				c.footer = ProjectForm()
+				c.foot = c.footerStyle.Render(c.footer.View())
+				return c, cmd
 			}
 		}
 		if c.footer != nil && c.footer.active {
@@ -83,6 +87,9 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					AddDataToJson(userTask)
 					c.footer.active = false
 					c.list.InsertItem(100, userTask)
+				} else if c.footer.formType == project {
+					WriteNewJson(userTask)
+					c.footer.active = false
 				}
 			default:
 				result, cmd := c.footer.Update(msg)

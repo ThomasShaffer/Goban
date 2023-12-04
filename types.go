@@ -9,6 +9,7 @@ const (
 	add formType = iota
 	edit
 	pomodoro
+	project
 )
 
 const (
