@@ -8,9 +8,11 @@ import (
 
 var m *ListModel
 var projects *Projects
+var config *OperatingSystemConfig
 var p *tea.Program
 
 func main() {
+    config = initializeConfig()
 	projects = initializeProjects()
 	m = initializeModel()
 	p = tea.NewProgram(m, tea.WithAltScreen())

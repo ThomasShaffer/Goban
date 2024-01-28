@@ -24,7 +24,7 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		c.footerStyle = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(msg.Height/3 - 3).Align(lipgloss.Center)
+		c.footerStyle = lipgloss.NewStyle().Padding(1, 1).BorderStyle(config.borderStyle).Width(msg.Width - 2).Height(msg.Height/3 - 3).Align(lipgloss.Center)
 		c.foot = c.NewFooter()
 		c.width = msg.Width/margin - 2
 		c.list.SetSize(msg.Width/margin, msg.Height/2)
@@ -105,9 +105,9 @@ func (c Column) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (c Column) View() string {
 	if c.focused {
-		return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).BorderForeground(lipgloss.Color("62")).Width(c.width).Height(c.height).Render(c.list.View())
+		return lipgloss.NewStyle().Padding(1, 1).BorderStyle(config.borderStyle).BorderForeground(lipgloss.Color("62")).Width(c.width).Height(c.height - config.columnHeight).Render(c.list.View())
 	}
-	return lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(c.width).Height(c.height).Render(c.list.View())
+	return lipgloss.NewStyle().Padding(1, 1).BorderStyle(config.borderStyle).Width(c.width).Height(c.height - 15).Render(c.list.View())
 }
 
 func renderColumns(data []todoModel) []Column {

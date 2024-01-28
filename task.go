@@ -12,7 +12,8 @@ func (t Task) FilterValue() string {
 }
 
 func (t Task) Title() string {
-	return t.title
+    slice := min(len(t.title), config.taskTitleCutoff)
+    return t.title[:slice] 
 }
 
 func (t Task) Description() string {

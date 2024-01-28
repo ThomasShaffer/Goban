@@ -18,7 +18,7 @@ func (m *ListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		var cmd tea.Cmd
 		var cmds []tea.Cmd
-		m.header = lipgloss.NewStyle().Padding(1, 1).BorderStyle(lipgloss.NormalBorder()).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render(projects.currProject().name)
+		m.header = lipgloss.NewStyle().Padding(config.headerPadding, config.headerPadding).BorderStyle(config.borderStyle).Width(msg.Width - 2).Height(2).Align(lipgloss.Center).Render(projects.currProject().name)
 		m.lists = m.initializeLists()
 		for i := 0; i < len(m.lists); i++ {
 			var res tea.Model
